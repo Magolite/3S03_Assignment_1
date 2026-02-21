@@ -1,0 +1,109 @@
+Prompt:
+Suppose you are developing a game. This action-adventure game involves exploration in a post-apocalyptic version of McMaster University, where up to eight players may be accosted by zombies, mutated professors, angry Deans, killer squirrels, and more. Gameplay can be both competitive and cooperative. The game is to be released on the PS5, Xbox Series X, Nintendo Switch and, for some reason known only to your designers, the Sega Genesis, which is 16-bit only and hasn’t been manufactured since 1997. Given the project above, please specify three types of software development tests for such a game.
+
+Response:
+For a large, cross-platform action-adventure game like this (PS5, Xbox Series X, Nintendo Switch, and even Sega Genesis), testing needs to cover functionality, integration, and platform constraints. Here are three key types of software development tests that would be essential:
+
+1️⃣ Unit Testing (Component Testing)
+
+What it tests:
+Individual functions, classes, or modules in isolation.
+
+In your game, this could include:
+
+Damage calculation logic (e.g., zombie attack vs. player armor).
+
+AI decision logic for mutated professors or killer squirrels.
+
+Inventory system (adding/removing items).
+
+Multiplayer state updates for up to 8 players.
+
+Save/load game state serialization.
+
+Why it’s important here:
+
+The game has many interacting entities (zombies, Deans, professors, squirrels).
+
+Combat, health, and scoring logic must be mathematically correct.
+
+Early bug detection prevents cascading gameplay issues.
+
+For example:
+
+If a function calculates damage incorrectly, every combat interaction breaks.
+
+If networking state logic fails, multiplayer becomes inconsistent.
+
+2️⃣ Integration Testing
+
+What it tests:
+How multiple components work together.
+
+In your game, this could include:
+
+Player movement interacting with collision detection.
+
+AI interacting with the environment and pathfinding.
+
+Multiplayer synchronization between consoles.
+
+Game physics interacting with animation systems.
+
+Save/load system working with world state and inventory.
+
+Why it’s critical here:
+
+You support both cooperative and competitive multiplayer.
+
+Cross-platform networking must stay synchronized.
+
+Complex entity interactions (e.g., 8 players + 20 zombies + physics) must behave correctly together.
+
+Example scenario:
+
+A player defeats a mutated professor.
+
+XP increases.
+
+Loot drops.
+
+Multiplayer state updates for all players.
+
+Animation and sound trigger.
+All of that must function correctly together.
+
+3️⃣ System / Platform Compatibility Testing
+
+What it tests:
+The complete game running on each target platform under real conditions.
+
+In your game, this includes:
+
+Performance testing (FPS stability on Switch vs PS5).
+
+Memory constraints on Sega Genesis (16-bit limitations).
+
+Controller compatibility on each platform.
+
+Certification requirements (Sony, Microsoft, Nintendo compliance).
+
+Stress testing with 8 players online.
+
+Why this is especially important:
+
+The Sega Genesis has extreme hardware limitations compared to PS5/Xbox.
+
+The Nintendo Switch has lower processing power than PS5/Xbox.
+
+Each platform has different OS, graphics APIs, and networking systems.
+
+Example checks:
+
+Does the game crash on low memory?
+
+Does it maintain 60 FPS on PS5?
+
+Does the Genesis version overflow memory?
+
+Does the online multiplayer stay stable with 8 players?
