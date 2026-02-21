@@ -1,0 +1,117 @@
+Prompt:
+Suppose you are developing a game. This action-adventure game involves exploration in a post-apocalyptic version of a university,
+where up to eight players may be accosted by zombies, mutated professors, angry Deans, killer squirrels, and more. 
+Gameplay can be both competitive and cooperative. The game is to be released on the PS5, Xbox Series X, Nintendo Switch and, 
+for some reason known only to your designers, the Sega Genesis, which is 16-bit only and hasn’t been manufactured since 1997. 
+Specify three types of tests for such a game.
+
+Chatgpt answer:
+
+1. Functional Testing (Gameplay & Systems Testing)
+
+Purpose: Ensure all game mechanics and systems work as designed.
+
+What it covers:
+
+Player movement, combat, exploration mechanics
+
+AI behavior (zombies, mutated professors, angry Deans, killer squirrels)
+
+Cooperative and competitive multiplayer logic (up to 8 players)
+
+Inventory, health, scoring, and progression systems
+
+Save/load functionality
+
+UI/menus working correctly
+
+Examples:
+
+Do zombies properly detect and chase players?
+
+Does co-op revive logic work under all conditions?
+
+Are competitive score calculations accurate?
+
+Does the game crash when 8 players trigger combat simultaneously?
+
+This ensures the game actually works as intended.
+
+2. Compatibility & Platform Testing (Cross-Platform / Hardware Testing)
+
+Purpose: Ensure the game runs correctly across all target platforms:
+
+PS5
+
+Xbox Series X
+
+Nintendo Switch
+
+Sega Genesis (16-bit legacy hardware)
+
+What it covers:
+
+Performance differences (high-end consoles vs. Switch vs. 16-bit Genesis)
+
+Frame rate stability
+
+Graphics scaling and memory constraints
+
+Controller input handling across systems
+
+Platform-specific compliance requirements (certification rules)
+
+Special Consideration:
+The Sega Genesis version will require:
+
+Memory limitation testing
+
+Graphics downscaling validation
+
+Audio format compatibility checks
+
+Cartridge constraints testing
+
+This type of testing ensures the game works reliably across radically different hardware capabilities.
+
+3. Multiplayer & Network Testing
+
+Purpose: Ensure stable and fair multiplayer experiences.
+
+What it covers:
+
+Online matchmaking
+
+Peer-to-peer or server-based connectivity
+
+Latency handling
+
+Packet loss and disconnect recovery
+
+Synchronization between players
+
+Cross-platform interaction (if supported)
+
+Stress Testing Examples:
+
+8 players fighting multiple enemies simultaneously
+
+High-latency simulations
+
+Mid-game player disconnect and reconnection
+
+Competitive mode edge cases (ties, rage quits)
+
+This ensures smooth cooperative and competitive gameplay without desynchronization or unfair advantages.
+
+Summary
+
+The three major test categories are:
+
+Functional Testing – Does the game work correctly?
+
+Compatibility/Platform Testing – Does it run properly on all systems?
+
+Multiplayer & Network Testing – Does online play remain stable and fair?
+
+Together, these address correctness, performance, and player experience across both modern consoles and legacy hardware.
