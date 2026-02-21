@@ -1,0 +1,36 @@
+1.a) The for loop goes from length-1 to 1, instead of length-1 to 0, as the loop executes so long as the variable i, which decrements by 1 each loop, is > 0, instead of >= 0. This causes it to skip over the 0 index, leading it to miss the last index of the target value in the provided case
+
+To fix it, edit this line
+
+for (int i=x.length-1; i > 0; i--)
+
+to this
+
+for (int i=x.length-1; i >= 0; i--)
+
+b) test: x=[1,4,6,8]; y=6; Expected = 2
+This test case does not execute the fault, as the expected returned index is not zero, and so the program returns the correct value before the zero index can be skipped
+
+e) Such a test case is not possible. If the fault is executed, then the zero index will be skipped, always resulting in an error state
+
+d) test: x=[1,4,6,8]; y=5; Expected = -1
+This test case executes the fault, resulting in an error state, as the for loop executes to completion without returning early, reaching and skipping the zero index. However, since the target value is not in the list, to begin with, and the expected result is -1, it does not fail.
+
+e) the first error state reached, is when i is decremented to zero, and instead of continuing the for loop to check the zero index, the for loop condition is no longer met and it ends before all indices of the array can be checked
+
+
+2.a) The for loop increments from 0 to length-1, instead of decrementing. This would lead it to returning the first index of 0, instead of the last, in the provided case
+
+To fix it, edit this line
+
+for (int i = 0; i < x.length; i++)
+
+To this
+
+for (int i=x.length-1; i >= 0; i--)
+
+b) This is not possible, as if the loop is triggered even once, the variable i will be incremented instead of decremented
+
+c) test: x=[0]; Expected = 0
+
+d) test: x=[9,4,0,2]; Expected = 2
