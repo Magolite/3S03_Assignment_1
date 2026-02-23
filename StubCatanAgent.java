@@ -1,10 +1,7 @@
-import java.util.List;
-import java.util.Map;
-
 public class StubCatanAgent implements CatanAgent{ 
 
     public void init(int playerID){
-        //do nothing, this is just here to return a valid player ID state
+        //do nothing, dont need to initialize for a stub
     }
 
     public Move chooseInitialSettlement(GameState state){
@@ -23,8 +20,8 @@ public class StubCatanAgent implements CatanAgent{
     }
 
     public Map<ResourceType, Integer> chooseDiscard(GameState state,int discardCount){
-        //return a valid discard state, using a dummy for this
-        return buildDummyDiscard(state, discardCount);
+        //new empty map to return, since the stub doesn't need to actually discard, and is only meant to test gameplay and flow logic
+        return new HashMap<>();
     } 
 
     public ResourceType chooseResource(GameState state){
