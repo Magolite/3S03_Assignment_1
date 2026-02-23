@@ -1,0 +1,810 @@
+Section 3 Responses: 
+
+a) [1.5 marks] Given the following interface, how would you decouple the agents’ 
+
+behaviour from your current focus, i.e., core game dynamics? Explain the idea and 
+
+justify it. 
+
+public interface CatanAgent { 
+
+void init(int playerId); 
+
+Move chooseInitialSettlement(GameState state); 
+
+Move chooseInitialRoad(GameState state); 
+
+Move chooseMove(GameState state); 
+
+Map<ResourceType, Integer> chooseDiscard(GameState state,int discardCount); 
+
+ResourceType chooseResource(GameState state); 
+
+int chooseRobberTarget(GameState state, List<Integer> possibleTargets); 
+
+DevelopmentCard chooseDevelopmentCard(GameState state); 
+
+} 
+
+In order to decouple the agent’s behaviour from the core game module or dynamics, we would use test doubles, such as stubs or mocks. This would involve creating a simple stub implementation of the CatanAgent, which would be a simple class which implements every method of the interface, but does so with simple hard-coded behaviour. By creating predefined legal and trivial actions for testing, we can test whether the game dynamics function properly, if moves are processed, rules are enforced, and state transitions within gameplay are correct. This supports the principle of separation of concern, where the decision logic does not interfere at all with the testing of gameplay rules. 
+
+b) [3 marks] Implement the idea in Java. 
+
+public class StubCatanAgent implements CatanAgent{  
+
+    public void init(int playerID){ 
+
+        //do nothing, dont need to initialize for a stub 
+
+    } 
+
+    public Move chooseInitialSettlement(GameState state){ 
+
+        //return the first legal option 
+
+        return state.getLegalMoves().get(0); 
+
+    } 
+
+    public Move chooseInitialRoad(GameState state){ 
+
+        //return the first legal option 
+
+        return state.getLegalMoves().get(0); 
+
+    } 
+
+    public Move chooseMove(GameState state){ 
+
+        //return the first legal option 
+
+        return state.getLegalMoves().get(0); 
+
+    } 
+
+    public Map<ResourceType, Integer> chooseDiscard(GameState state,int discardCount){ 
+
+        //new empty map to return, since the stub doesn't need to actually discard, and is only meant to test gameplay and flow logic 
+
+        return new HashMap<>(); 
+
+    }  
+
+    public ResourceType chooseResource(GameState state){ 
+
+        //return the first legal option for type of resource (ex: wood) 
+
+        return state.getLegalResourceChoices().get(0); 
+
+    } 
+
+    public int chooseRobberTarget(GameState state, List<Integer> possibleTargets){ 
+
+        //return the first legal option for a player to rob 
+
+        return possibleTargets.get(0); 
+
+    }  
+
+    public DevelopmentCard chooseDevelopmentCard(GameState state){ 
+
+        //return the first legal option for a development card 
+
+        return state.getLegalDevelopmentCards().get(0); 
+
+    }  
+
+} 
+
+ 
+
+c) [3 marks] What other solutions can you envision here? Name a solution you would 
+
+anticipate from a software developer who is not familiar with the techniques you 
+
+used. List 3-4 convincing points against their solution and in favor of yours. 
+
+I would anticipate a software developer who is not familiar with the concept of test doubles such as mocks, stubs, or fakes to test this code using hard-coded conditional logic and flags in the code, rather than creating custom test doubles. This may include adding boolean flags such as isTesting, which would run certain simplified sections of code as tests, and may include wrapping agent logic in conditional statements to check for these flags. This strategy is not ideal for a number of reasons: 
+
+Firstly, it causes code buildup and unnecessary complexity in production code. This violates the single responsibility principle, as test logic is to be kept separate from the decision-making process and game logic, which is not upheld in this case.  
+
+Secondly, it leads to high coupling between components. The agent code still needs to exist and must be compiled each time it is used, and all dependencies must be resolved, meaning that the agents cannot be tested separately from the game engine itself. Using stubs means that the full and complicated agent code does not need to be fully developed in order to begin testing, as a simplified stub version is used instead.  
+
+Thirdly, these tests are not reuseable and easily extendable. Because they are hard-coded within the business logic of the program, any key changes in game logic or agent behaviour means that the flags and test code must be updated anywhere it is used. When using the interface-based stubbing approach, new stub implementations can be created very simply, and will be isolated and avoids creating any unnecessary dependencies.  
+
+Fourthly, the card-coded flag-based approach is very hard to decouple and remove later if it is no longer needed. This often leads to messy code and buildup of redundant or unnecessary code, which would involve increased tech debt to fix or remove. Because stubs are isolated, they can be easily ignored or deleted if they are no longer needed. 
+
+d) [2.5 marks] What would you do if you realized no one in your company/unit/team 
+
+knows about the techniques you used in this exercise? To whom, how, and what would 
+
+you communicate to improve the software engineering process? What would be your 
+
+expectations? How does this question relate to your engineering practice, e.g., as 
+
+outlined by CEAB? 
+
+If I found that nobody in my company, unit, or team knew about test double techniques, I woud decide to help intorduce the team to these concepts and would let them know how it can be used to improve current testing processes, rather than keeping the knowlesge to myself. I would introduce this to my teammates first, in a more casual way such as bringing it up during pair programming or while working together on development. I would also bering it up with a team lead or team manager to help them understand how it can be used to benefit the team as a whole. From here, they may be able to help the knowledge spread across the whole team or unit so that everybody understands the concept and how it can be used.  
+
+I would communicate this information in several ways. First, while working with teammates, it would come up as a casual topic of discussion, perhaps a suggestion on uingtest doubles, and then a demonstration of what they are and how they work. When sharing with the team as a whole, this could be done in a group setting such as a meeting, knowlesge sharing session, or a ‘lunch and learn’ type setting. This enables people to see examples and ask questions they may have. I would also help produce written documentation and standards on this, as these would be required if the use of this technique becomes widespread within the unit.  
+
+Based on these methods and target audience, I would expect to get a good reception from the group. The use of test double techniques is very common in software development, and it supports good software design principles. However, I would not accept this change to happen immediately. A new concept like this does take time to learn, and some people may have trouble adapting at first. Realistically, this would be gradually adopted by the group, but would be something that is checked for in code reviews and testing plans, in order to encourage safe software development practices. 
+
+This relates to the CEAB engineering practice, as it supports the key concepts of professionalism and lifelong learning. These concepts are essential to professional work as an engineer and are demonstrated in the use and adoption of these techniques. Professionalism is done by sharing best practices and resources, and lifelong learning means being willing to learn new techniques and best practices and apply them to the work that is done in order to improve the product quality or outcomes. By sharing this knowledge and how it can be used to improve code safety and quality, we are supporting both of these essential components of engineering practice and professionalism.  
+
+ 
+
+Section 5 Responses: 
+
+a) [6 marks] Generate a reasonable amount of JUnit tests via Gen AI. Touch them up manually if there are compilation errors. Measure the coverage. (Choose a reasonably complex coverage metric; not the most simplistic one!)  
+
+The test code generated by GenAI are included below, and had a total coverage of 59.3% for the Assignment 1 code. I chose to measure coverage using branch coverage, as it is more meaningful than line coverage, given that it verifies that every decision point (or branch) in the code is exercised or executed by the tests. If I relied online coverage alone, it would have been possible to reach high line coverage and yet still miss some key decision points, so this approach ensures all key decisions are covered by tests.  
+
+package com.example.shop; 
+
+import org.junit.jupiter.api.Test; 
+
+import static org.junit.jupiter.api.Assertions.*; 
+
+public class OrderSystemTestInitial { 
+
+  
+
+    //OrderItem 
+
+    @Test 
+
+    void orderItem_validConstruction_returnsTotalPrice() { 
+
+        OrderItem item = new OrderItem("Book", 3, 10.0); 
+
+        assertEquals(30.0, item.getTotalPrice()); 
+
+    } 
+
+    @Test 
+
+    void orderItem_zeroQuantity_throwsException() { 
+
+        assertThrows(IllegalArgumentException.class, 
+
+            () -> new OrderItem("Book", 0, 10.0)); 
+
+    } 
+
+    @Test 
+
+    void orderItem_getQuantity_returnsCorrectValue() { 
+
+        OrderItem item = new OrderItem("Hat", 5, 20.0); 
+
+        assertEquals(5, item.getQuantity()); 
+
+    } 
+
+  
+
+    //Order 
+
+    @Test 
+
+    void order_initialStatus_isCreated() { 
+
+        Order order = new Order(); 
+
+        assertEquals(OrderStatus.CREATED, order.getStatus()); 
+
+    } 
+
+    @Test 
+
+    void order_addItem_whenCreated_succeeds() { 
+
+        Order order = new Order(); 
+
+        order.addItem(new OrderItem("Pen", 1, 2.0)); 
+
+        assertEquals(1, order.getItems().size()); 
+
+    } 
+
+  
+
+    //PricingService 
+
+    @Test 
+
+    void pricing_calculateSubtotal_multipleItems() { 
+
+        Order order = new Order(); 
+
+        order.addItem(new OrderItem("A", 2, 5.0)); 
+
+        order.addItem(new OrderItem("B", 1, 10.0)); 
+
+        PricingService ps = new PricingService(); 
+
+        assertEquals(20.0, ps.calculateSubtotal(order)); 
+
+    } 
+
+    @Test 
+
+    void pricing_calculateTax_positiveSubtotal() { 
+
+        PricingService ps = new PricingService(); 
+
+        assertEquals(20.0, ps.calculateTax(100.0)); 
+
+    } 
+
+  
+
+    //DiscountService 
+
+    @Test 
+
+    void discount_student10_applies10PercentOff() { 
+
+        DiscountService ds = new DiscountService(); 
+
+        assertEquals(90.0, ds.applyDiscount(100.0, "STUDENT10")); 
+
+    } 
+
+    @Test 
+
+    void discount_blackFriday_applies30PercentOff() { 
+
+        DiscountService ds = new DiscountService(); 
+
+        assertEquals(70.0, ds.applyDiscount(100.0, "BLACKFRIDAY")); 
+
+    } 
+
+  
+
+    //PaymentValidator 
+
+    @Test 
+
+    void payment_card_returnsTrue() { 
+
+        PaymentValidator pv = new PaymentValidator(); 
+
+        assertTrue(pv.isPaymentMethodValid("card")); 
+
+    } 
+
+    @Test 
+
+    void payment_paypal_returnsTrue() { 
+
+        PaymentValidator pv = new PaymentValidator(); 
+
+        assertTrue(pv.isPaymentMethodValid("paypal")); 
+
+    } 
+
+  
+
+    //OrderService 
+
+    @Test 
+
+    void orderService_validPaymentNoDiscount_returnsCorrectTotal() { 
+
+        OrderService os = new OrderService(); 
+
+        Order order = new Order(); 
+
+        order.addItem(new OrderItem("Item", 1, 100.0)); 
+
+        double result = os.processOrder(order, "", "card"); 
+
+        assertEquals(120.0, result); 
+
+        assertEquals(OrderStatus.PAID, order.getStatus()); 
+
+    } 
+
+    @Test 
+
+    void orderService_withStudent10Discount_returnsCorrectTotal() { 
+
+        OrderService os = new OrderService(); 
+
+        Order order = new Order(); 
+
+        order.addItem(new OrderItem("Textbook", 1, 100.0)); 
+
+        double result = os.processOrder(order, "STUDENT10", "paypal"); 
+
+        assertEquals(108.0, result); 
+
+        assertEquals(OrderStatus.PAID, order.getStatus()); 
+
+    } 
+
+} 
+
+b) [16 marks] Work with Gen AI until you reach 90% coverage. You can use Gen AI, your own engineering skills, or a mix of the two to reach the desired coverage. Hint: Be creative and think about what Gen AI is good for and what your engineering skills are good for.  
+
+If you reached 90% coverage, how much time it has taken?  
+
+What strategy did you use? (For example, did you switch between AI and human once, multiple times, regularly? Was there a role the AI played and role the human played?)  
+
+Given the 59.3% coverage case above, I recognized that it was time to improve the tests to ensure that they reach 90% or higher branch coverage. This was done by first going to check the branches that may not be covered, and thinking up tests for them. I then passed these requests to generative Ai and asked it to recommend test structures that I could use to meet the requirement for that branch. I then took the generated code and modified it so that it would compile and run as intended. This order of human input, generative AI feedback, and human refinement allowed me to reach 100% branch coverage within two hours. In this case, the AI contributes pattern recognition in recognizing the necessary structure for the tests, while my own human input helped with recognizing any environment or project-specific aspects that were missing such as edge cases for certain branches, exceptions that weren’t handled properly, or issues with state logic and behaviour.. In this case, I used the AI to essentially create ‘templates’ that could be used to write the remainder of the tests to meet the required coverage standard.  
+ 
+The complete set of tests is below: 
+package com.example.shop; 
+
+import org.junit.jupiter.api.Test; 
+
+import static org.junit.jupiter.api.Assertions.*; 
+
+ 
+
+public class OrderSystemTest { 
+
+  
+
+    //OrderItem 
+
+    @Test 
+
+    void orderItem_validConstruction_returnsTotalPrice() { 
+
+        OrderItem item = new OrderItem("Book", 3, 10.0); 
+
+        assertEquals(30.0, item.getTotalPrice()); 
+
+    } 
+
+    @Test 
+
+    void orderItem_zeroQuantity_throwsException() { 
+
+        assertThrows(IllegalArgumentException.class, 
+
+            () -> new OrderItem("Book", 0, 10.0)); 
+
+    } 
+
+    @Test 
+
+    void orderItem_negativeQuantity_throwsException() { 
+
+        assertThrows(IllegalArgumentException.class, 
+
+            () -> new OrderItem("Book", -1, 10.0)); 
+
+    } 
+
+    @Test 
+
+    void orderItem_negativeUnitPrice_throwsException() { 
+
+        assertThrows(IllegalArgumentException.class, 
+
+            () -> new OrderItem("Book", 1, -5.0)); 
+
+    } 
+
+  
+
+    @Test 
+
+    void orderItem_zeroPriceIsAllowed() { 
+
+        OrderItem item = new OrderItem("Freebie", 2, 0.0); 
+
+        assertEquals(0.0, item.getTotalPrice()); 
+
+    } 
+
+    @Test 
+
+    void orderItem_getQuantity_returnsCorrectValue() { 
+
+        OrderItem item = new OrderItem("Hat", 5, 20.0); 
+
+        assertEquals(5, item.getQuantity()); 
+
+    } 
+
+  
+
+    //Order 
+
+    @Test 
+
+    void order_initialStatus_isCreated() { 
+
+        Order order = new Order(); 
+
+        assertEquals(OrderStatus.CREATED, order.getStatus()); 
+
+    } 
+
+    @Test 
+
+    void order_addItem_whenCreated_succeeds() { 
+
+        Order order = new Order(); 
+
+        order.addItem(new OrderItem("Pen", 1, 2.0)); 
+
+        assertEquals(1, order.getItems().size()); 
+
+    } 
+
+    @Test 
+
+    void order_addItem_afterPaid_throwsException() { 
+
+        Order order = new Order(); 
+
+        order.setStatus(OrderStatus.PAID); 
+
+        assertThrows(IllegalStateException.class, 
+
+            () -> order.addItem(new OrderItem("Pen", 1, 2.0))); 
+
+    } 
+
+    @Test 
+
+    void order_addItem_afterCancelled_throwsException() { 
+
+        Order order = new Order(); 
+
+        order.setStatus(OrderStatus.CANCELLED); 
+
+        assertThrows(IllegalStateException.class, 
+
+            () -> order.addItem(new OrderItem("Pen", 1, 2.0))); 
+
+    } 
+
+    @Test 
+
+    void order_setStatus_updatesStatus() { 
+
+        Order order = new Order(); 
+
+        order.setStatus(OrderStatus.PAID); 
+
+        assertEquals(OrderStatus.PAID, order.getStatus()); 
+
+    } 
+
+  
+
+    //PricingService 
+
+    @Test 
+
+    void pricing_calculateSubtotal_multipleItems() { 
+
+        Order order = new Order(); 
+
+        order.addItem(new OrderItem("A", 2, 5.0)); 
+
+        order.addItem(new OrderItem("B", 1, 10.0)); 
+
+        PricingService ps = new PricingService(); 
+
+        assertEquals(20.0, ps.calculateSubtotal(order)); 
+
+    } 
+
+    @Test 
+
+    void pricing_calculateSubtotal_emptyOrder_returnsZero() { 
+
+        Order order = new Order(); 
+
+        PricingService ps = new PricingService(); 
+
+        assertEquals(0.0, ps.calculateSubtotal(order)); 
+
+    } 
+
+    @Test 
+
+    void pricing_calculateTax_positiveSubtotal() { 
+
+        PricingService ps = new PricingService(); 
+
+        assertEquals(20.0, ps.calculateTax(100.0)); 
+
+    } 
+
+    @Test 
+
+    void pricing_calculateTax_zeroSubtotal_returnsZero() { 
+
+        PricingService ps = new PricingService(); 
+
+        assertEquals(0.0, ps.calculateTax(0.0)); 
+
+    } 
+
+    @Test 
+
+    void pricing_calculateTax_negativeSubtotal_throwsException() { 
+
+        PricingService ps = new PricingService(); 
+
+        assertThrows(IllegalArgumentException.class, 
+
+            () -> ps.calculateTax(-1.0)); 
+
+    } 
+
+  
+
+    //DiscountService 
+
+    @Test 
+
+    void discount_nullCode_returnsOriginalSubtotal() { 
+
+        DiscountService ds = new DiscountService(); 
+
+        assertEquals(100.0, ds.applyDiscount(100.0, null)); 
+
+    } 
+
+    @Test 
+
+    void discount_blankCode_returnsOriginalSubtotal() { 
+
+        DiscountService ds = new DiscountService(); 
+
+        assertEquals(100.0, ds.applyDiscount(100.0, "   ")); 
+
+    } 
+
+    @Test 
+
+    void discount_student10_applies10PercentOff() { 
+
+        DiscountService ds = new DiscountService(); 
+
+        assertEquals(90.0, ds.applyDiscount(100.0, "STUDENT10")); 
+
+    } 
+
+    @Test 
+
+    void discount_student10_caseInsensitive() { 
+
+        DiscountService ds = new DiscountService(); 
+
+        assertEquals(90.0, ds.applyDiscount(100.0, "student10")); 
+
+    } 
+
+    @Test 
+
+    void discount_blackFriday_applies30PercentOff() { 
+
+        DiscountService ds = new DiscountService(); 
+
+        assertEquals(70.0, ds.applyDiscount(100.0, "BLACKFRIDAY")); 
+
+    } 
+
+    @Test 
+
+    void discount_invalidCode_throwsException() { 
+
+        DiscountService ds = new DiscountService(); 
+
+        assertThrows(IllegalArgumentException.class, 
+
+            () -> ds.applyDiscount(100.0, "INVALID")); 
+
+    } 
+
+    @Test 
+
+    void discount_unknownCode_returnsOriginalSubtotal() { 
+
+        DiscountService ds = new DiscountService(); 
+
+        assertEquals(100.0, ds.applyDiscount(100.0, "RANDOMCODE")); 
+
+    } 
+
+  
+
+    //PaymentValidator 
+
+    @Test 
+
+    void payment_nullMethod_returnsFalse() { 
+
+        PaymentValidator pv = new PaymentValidator(); 
+
+        assertFalse(pv.isPaymentMethodValid(null)); 
+
+    } 
+
+    @Test 
+
+    void payment_card_returnsTrue() { 
+
+        PaymentValidator pv = new PaymentValidator(); 
+
+        assertTrue(pv.isPaymentMethodValid("card")); 
+
+    } 
+
+    @Test 
+
+    void payment_cardUpperCase_returnsTrue() { 
+
+        PaymentValidator pv = new PaymentValidator(); 
+
+        assertTrue(pv.isPaymentMethodValid("CARD")); 
+
+    } 
+
+    @Test 
+
+    void payment_paypal_returnsTrue() { 
+
+        PaymentValidator pv = new PaymentValidator(); 
+
+        assertTrue(pv.isPaymentMethodValid("paypal")); 
+
+    } 
+
+    @Test 
+
+    void payment_crypto_returnsFalse() { 
+
+        PaymentValidator pv = new PaymentValidator(); 
+
+        assertFalse(pv.isPaymentMethodValid("crypto")); 
+
+    } 
+
+    @Test 
+
+    void payment_unknownMethod_throwsException() { 
+
+        PaymentValidator pv = new PaymentValidator(); 
+
+        assertThrows(UnsupportedOperationException.class, 
+
+            () -> pv.isPaymentMethodValid("bitcoin")); 
+
+    } 
+
+  
+
+    //OrderService 
+
+    @Test 
+
+    void orderService_invalidPayment_cancelOrderAndReturnsZero() { 
+
+        OrderService os = new OrderService(); 
+
+        Order order = new Order(); 
+
+        order.addItem(new OrderItem("Widget", 1, 50.0)); 
+
+        double result = os.processOrder(order, null, "crypto"); 
+
+        assertEquals(0.0, result); 
+
+        assertEquals(OrderStatus.CANCELLED, order.getStatus()); 
+
+    } 
+
+    @Test 
+
+    void orderService_nullPayment_cancelOrderAndReturnsZero() { 
+
+        OrderService os = new OrderService(); 
+
+        Order order = new Order(); 
+
+        order.addItem(new OrderItem("Widget", 1, 50.0)); 
+
+        double result = os.processOrder(order, null, null); 
+
+        assertEquals(0.0, result); 
+
+        assertEquals(OrderStatus.CANCELLED, order.getStatus()); 
+
+    } 
+
+    @Test 
+
+    void orderService_validPaymentNoDiscount_returnsCorrectTotal() { 
+
+        OrderService os = new OrderService(); 
+
+        Order order = new Order(); 
+
+        order.addItem(new OrderItem("Item", 1, 100.0)); 
+
+        // subtotal=100, no discount, tax=20 → total=120 
+
+        double result = os.processOrder(order, "", "card"); 
+
+        assertEquals(120.0, result); 
+
+        assertEquals(OrderStatus.PAID, order.getStatus()); 
+
+    } 
+
+    @Test 
+
+    void orderService_withStudent10Discount_returnsCorrectTotal() { 
+
+        OrderService os = new OrderService(); 
+
+        Order order = new Order(); 
+
+        order.addItem(new OrderItem("Textbook", 1, 100.0)); 
+
+        // subtotal=100, 10% off=90, tax=18 → total=108 
+
+        double result = os.processOrder(order, "STUDENT10", "paypal"); 
+
+        assertEquals(108.0, result); 
+
+        assertEquals(OrderStatus.PAID, order.getStatus()); 
+
+    @Test 
+
+    void orderService_withBlackFridayDiscount_returnsCorrectTotal() { 
+
+        OrderService os = new OrderService(); 
+
+        Order order = new Order(); 
+
+        order.addItem(new OrderItem("TV", 1, 100.0)); 
+
+        // subtotal=100, 30% off=70, tax=14 → total=84 
+
+        double result = os.processOrder(order, "BLACKFRIDAY", "card"); 
+
+        assertEquals(84.0, result); 
+
+    } 
+
+    @Test 
+
+    void orderService_emptyOrderValidPayment_returnsZero() { 
+
+        OrderService os = new OrderService(); 
+
+        Order order = new Order(); 
+
+        double result = os.processOrder(order, null, "card"); 
+
+        assertEquals(0.0, result); 
+
+        assertEquals(OrderStatus.PAID, order.getStatus()); 
+
+    } 
+
+} 
+
+c) [4 marks] What are your key takeaways from this exercise? What is gen AI useful for and what is human cognition useful for in this particular setting (testing and reaching test coverage)?  
+
+Based on this exercise, my key takeaways are that the AI is very good at pattern matching and generating template or boilerplate code and tests, but often struggles with the nuances of developing specific test cases to meet required coverage standards or metrics. Generative AI is very helpful for developing a base set of tests to base a test suite on, as it is able to cover a little over half of the branches and catches obvious edge cases such as null inputs, empty lists, or validation rules such as negative value inputs. Because all of these kinds of tests follow very specific patterns and structure, the AI does a good job of creating them. However, it struggles with the more complex elements such as finding deeper logical contexts, business logic and semantics of the program, and deciding what coverage is considered meaningful. It is these points in test development that require human input. Continually prompting a generative AI model may help get relatively high coverage, but in order to achieve the last ~20% of coverage, human input is needed as humans are able to recognize and understand the additional context that is needed to achieve high branch coverage percentages.  
+
+d) [4 marks] Based on your takeaways, envision the next generation of AI-enabled, human-in-the-loop testing tools, e.g., ones that you would like to work with. If you had to invest $1M into developing such tools, what would be the top features of that tool? What would be the biggest challenges of widespread adoption? 
+
+If I were to invest in developing an AI testing tool, I would develop a custom human-in-the-loop testing tool with features such as live coverage monitoring, natural language input options, test redundancy detection, and an interactive coverage component. Live coverage monitoring and the live coverage dashboard would allow users to view live assessments of their test coverage ad what sections of code, lines, or branches are covered. This would make it easier for individuals to recognize what parts of their code may need more tests and what is already covered. The redundancy checker also helps to avoid unnecessary tests that may slow down program runtime or fill the codebase with unused tests. Finally, there would be the option for natural language input, which allows people to describe the intended context and goals of a specific test, which the agent will then interpret and draft a test for. This allows the agent to gain additional context as to what may be needed for the tests by gathering information from human developers, who have a much higher capacity to understand the full project scope and context.  
+
+Though this tool would be very helpful , there are a few potential challenges to widespread adoption of the tool. The first issue is that of trust and correctness. Some safety-critical or restricted access projects may not allow for the use of external (non company-made) tools for code generation or analysis due to security or safety risks. There is also the issue of the tool potentially struggling with large legacy codebases, where people may not be able to provide all of the context needed in a simple message, in order to enable the tool to help produce tests as expected. Legacy code is often complex and the tool may struggle to work effectively on it. The final risk is that of over reliance on the software testing tool and coverage metrics. If teams use the tool with the sole intention of reaching coverage numbers without ensuring that their coverage is correct and genuinely improves code quality, the tool may prove harmful or non-beneficial.  
