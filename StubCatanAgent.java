@@ -28,15 +28,18 @@ public class StubCatanAgent implements CatanAgent{
     } 
 
     public ResourceType chooseResource(GameState state){
-        
+        //return the first legal option for type of resource (ex: wood)
+        return state.getLegalResourceChoices().get(0);
     }
 
     public int chooseRobberTarget(GameState state, List<Integer> possibleTargets){
-        
+        //return the first legal option for a player to rob
+        return possibleTargets.get(0);
     } 
 
     public DevelopmentCard chooseDevelopmentCard(GameState state){
-
+        //return the first legal option for a development card
+        return state.getLegalDevelopmentCards().get(0);
     } 
 
 }
