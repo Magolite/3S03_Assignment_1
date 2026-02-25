@@ -1,6 +1,6 @@
 1.a) The for loop goes from length-1 to 1, instead of length-1 to 0, 
-as the loop executes so long as the variable i, which decrements by 1 each loop, is > 0, instead of >= 0. 
-This causes it to skip over the 0 index, leading it to miss the last index of the target value in the provided case
+The loop executes so long as the variable i, which decrements by 1 each loop, is > 0, instead of >= 0. 
+This causes it to skip over the 0 index, leading it to miss the last index of the array, containing the target value, in the provided case
 
 To fix it, edit this line
 
@@ -19,7 +19,7 @@ This test case executes the fault but does not result in an error state, as the 
 and so the program returns the correct value before the zero index can be skipped
 
 d) test: x=[1,4,6,8]; y=5; Expected = -1
-This test case executes the fault, resulting in an error state, as the for loop executes to completion without returning early, 
+This test case executes the fault, resulting in an error state, as the for loop executes to completion without returning early, therefore
 reaching and skipping the zero index. However, since the target value is not in the list to begin with, and the expected result is -1, it does not fail.
 
 e) the first error state is reached, when i is decremented to zero, 
@@ -54,6 +54,7 @@ however, since there is only one 0 in the array, the first occurence is also the
 e) the first error state is reached when we have an array of length more than one, so on the second loop, i gets incremented up
 and the loop is iterated through in the wrong direction
 
+
 3.a) The conditional which increments the counter accepts values that are greater than or equal
 to zero, instead of just greater than them. This leads to zeros being mistakenly counted as positive when they shouldn't be
 
@@ -81,39 +82,41 @@ This is because there are no zeros in the array to mistakenly count as positive
 
 d) It isn't possible to have a test here that results in an error state but not a failiure,
 as if there is a zero to be mistakenly counted as positive, it will result in count being incremented
-and therefore the wrong value of count will be returned
+there are also no inputs which would be mistakenly not counted, that could counterbalance this
+therefore the wrong value of count will be returned
 
 e) The first error state is reached when x[i] = 0, and the conditional mistakenly counts it as positive,
 allowing count to be incremented
 
-4.a) The conditional which increments the counter accepts values that are greater than or equal
-to zero, instead of just greater than them. This leads to zeros being mistakenly counted as positive when they shouldn't be
+
+4.a) The conditional which checks x[i] mod 2 actually returns a value of -1, not 1, if x[i] is a negative odd number
+This means that the program will skip negative odd numbers instead of counting them
 
 To fix it, edit this line
 
-if (x[i] >= 0)
+if (x[i]%2 == 1 || x[i] > 0)
 {
-  count++;
-}  
+count++;
+}
 
 To this
 
-if (x[i] > 0)
+if (x[i]%2 != 0 || x[i] > 0)
 {
-  count++;
-}  
+count++;
+}
 
 b) test x=[]; Expected = 0
 This test case does not execute the fault, as the loop condition does not iterate over arrays
 of length zero, so the code inside the for loop is never executed
 
-c) test: x=[2,7,-1]; Expected = 2
+c) test: x=[2,7,5,-2]; Expected = 3
 This test case executes the fault but does not return an error state,
-This is because there are no zeros in the array to mistakenly count as positive
+This is because there are no negative odd numbers to mistakenly yield a value of -1 from the mod operation
 
-d) It isn't possible to have a test here that results in an error state but not a failiure,
-as if there is a zero to be mistakenly counted as positive, it will result in count being incremented
-and therefore the wrong value of count will be returned
+d) It isn't possible to have a test here that results in an error state but not a failure,
+as if a negative odd number is mistakenly not counted, count will not be incremented
+and there are no inputs that are mistakenly counted that could counterbalance this
 
-e) The first error state is reached when x[i] = 0, and the conditional mistakenly counts it as positive,
-allowing count to be incremented
+e) The first error state is reached when x[i] is a negative odd number, and the conditional mistakenly misses that it is odd
+because the mod operation returns -1 instead of 1, leading to count not being incremented
